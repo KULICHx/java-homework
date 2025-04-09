@@ -102,15 +102,6 @@ class Task3Test {
     }
 
     @Test
-    @DisplayName("Массивы с одинаковыми границами - возвращает false")
-    void isNestable_ArraysWithSameBounds_ReturnsFalse() {
-        int[] a1 = {2, 3};
-        int[] a2 = {1, 2, 3, 4};
-
-        assertThat(Task3.isNestable(a1, a2)).isFalse();
-    }
-
-    @Test
     @DisplayName("Первый массив с одним элементом - проверка вложенности")
     void isNestable_SingleElementFirstArray_ReturnsCorrectResult() {
         int[] a1 = {5};

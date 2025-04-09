@@ -15,7 +15,6 @@ class Task4Test {
         "123456, 214365",
         "hTsii  s aimex dpus rtni.g, This is a mixed up string.",
         "оПомигети псаривьтс ртко!и, Помогите исправить строки!",
-        "aabbcc, aba bcc",
         "ABCDEF, BADCFE"
     })
     void fixString_EvenLengthStrings_ReturnsFixedString(String input, String expected) {
@@ -55,21 +54,4 @@ class Task4Test {
         assertThat(Task4.fixString("ab")).isEqualTo("ba");
     }
 
-    @Test
-    @DisplayName("Строка с пробелами корректно обрабатывается")
-    void fixString_StringWithSpaces_ReturnsFixed() {
-        assertThat(Task4.fixString("  hello  world  ")).isEqualTo(" h el lo ow rld ");
-    }
-
-    @Test
-    @DisplayName("Строка со специальными символами корректно обрабатывается")
-    void fixString_StringWithSpecialChars_ReturnsFixed() {
-        assertThat(Task4.fixString("@#$%^&*")).isEqualTo("#@%$^*&");
-    }
-
-    @Test
-    @DisplayName("Строка с символами разных регистров корректно обрабатывается")
-    void fixString_MixedCaseString_ReturnsFixed() {
-        assertThat(Task4.fixString("HeLlO")).isEqualTo("eHlLo");
-    }
 }

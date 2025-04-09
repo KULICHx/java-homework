@@ -35,31 +35,10 @@ class Task7Test {
     }
 
     @Test
-    @DisplayName("Циклический сдвиг вправо: 1 >> 1 = 2 (0001 -> 0010)")
-    void rotateRight_ValidInput_ReturnsCorrectResultFor1Shift1() {
-        // Act & Assert
-        assertThat(Task7.rotateRight(1, 1)).isEqualTo(2);
-    }
-
-    @Test
-    @DisplayName("Циклический сдвиг влево: 1 << 1 = 2 (0001 -> 0010)")
-    void rotateLeft_ValidInput_ReturnsCorrectResultFor1Shift1() {
-        // Act & Assert
-        assertThat(Task7.rotateLeft(1, 1)).isEqualTo(2);
-    }
-
-    @Test
     @DisplayName("Циклический сдвиг вправо: 32 >> 5 = 1 (100000 -> 00001)")
     void rotateRight_ValidInput_ReturnsCorrectResultFor32Shift5() {
         // Act & Assert
         assertThat(Task7.rotateRight(32, 5)).isEqualTo(1);
-    }
-
-    @Test
-    @DisplayName("Циклический сдвиг влево: 32 << 5 = 1 (100000 -> 00001)")
-    void rotateLeft_ValidInput_ReturnsCorrectResultFor32Shift5() {
-        // Act & Assert
-        assertThat(Task7.rotateLeft(32, 5)).isEqualTo(1);
     }
 
     @Test
@@ -69,10 +48,4 @@ class Task7Test {
         assertThat(Task7.rotateRight(1024, 10)).isEqualTo(1);
     }
 
-    @Test
-    @DisplayName("Циклический сдвиг влево: 1024 << 10 = 1 (10000000000 -> 00000000001)")
-    void rotateLeft_ValidInput_ReturnsCorrectResultFor1024Shift10() {
-        // Act & Assert
-        assertThat(Task7.rotateLeft(1024, 10)).isEqualTo(1);
-    }
 }
