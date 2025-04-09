@@ -1,8 +1,10 @@
 name: Build
 
 on:
-  workflow_dispatch:
-  pull_request:
+  push:
+    branches: [ "hw1" ]  # Автозапуск при пуше
+  pull_request:          # Проверка PR
+  workflow_dispatch:     # Ручной запуск
 
 jobs:
   build:
