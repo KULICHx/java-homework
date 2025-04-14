@@ -45,15 +45,10 @@ public class SessionTest {
     void multiCharInputIgnored() {
         Session session = new Session("код", 5);
 
-        // Симулируем проверку в интерфейсе — Session не должен обрабатывать строки
-        // Поэтому мы предполагаем, что такая проверка находится выше (в ConsoleHangman),
-        // а сам метод guessLetter(char) вызывается только при валидном вводе
 
         int beforeAttempts = session.getRemainingAttempts();
         String beforeProgress = session.getProgress();
 
-        // Опечатка: пользователь ввёл целое слово или больше 1 символа
-        // Мы просто не вызываем guessLetter() — это должно игнорироваться
 
         // Проверка, что состояние не изменилось
         assertThat(session.getRemainingAttempts()).isEqualTo(beforeAttempts);
