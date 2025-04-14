@@ -53,5 +53,4 @@ class Task4Test {
     void fixString_TwoCharacters_ReturnsSwapped() {
         assertThat(Task4.fixString("ab")).isEqualTo("ba");
     }
-
 }
