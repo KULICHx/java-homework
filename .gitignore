@@ -30,3 +30,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Игнорируем файл со словами ###
+src/main/resources/10000-russian-words.txt
