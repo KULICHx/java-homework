@@ -1,9 +1,7 @@
 package edu.project1.ui;
 
 import edu.project1.logic.Session;
-
 import java.util.Scanner;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
