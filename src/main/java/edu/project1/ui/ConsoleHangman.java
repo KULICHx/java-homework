@@ -1,7 +1,9 @@
 package edu.project1.ui;
 
 import edu.project1.logic.Session;
+
 import java.util.Scanner;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,6 +15,11 @@ public class ConsoleHangman {
     public ConsoleHangman(Session session) {
         this.session = session;
         this.scanner = new Scanner(System.in);
+    }
+
+    public ConsoleHangman(Session session, Scanner scanner) {
+        this.session = session;
+        this.scanner = scanner;
     }
 
     // Метод для старта игры
