@@ -1,14 +1,15 @@
 package edu.project1.logic;
 
 public class Session {
+    private static final String HIDDEN_CHAR = "_";
     private final String wordToGuess;
     private int remainingAttempts;
     StringBuilder progress;
 
     public Session(String word, int maxAttempts) {
         this.wordToGuess = word;
-        this.progress = new StringBuilder("_".repeat(word.length()));  // Инициализируем прогресс
-        this.remainingAttempts = maxAttempts;  // Устанавливаем количество попыток
+        this.progress = new StringBuilder(HIDDEN_CHAR.repeat(word.length()));
+        this.remainingAttempts = maxAttempts;
     }
 
     public boolean guessLetter(char letter) {
@@ -31,15 +32,13 @@ public class Session {
     }
 
     public boolean isWordGuessed() {
-        return progress.indexOf("_") == -1;  // Если нет незаполненных мест, значит слово угадано
+        return progress.indexOf(HIDDEN_CHAR) == -1;
     }
 
-    // Получение текущего состояния прогресса
     public String getProgress() {
         return progress.toString();
     }
 
-    // Получение оставшихся попыток
     public int getRemainingAttempts() {
         return remainingAttempts;
     }

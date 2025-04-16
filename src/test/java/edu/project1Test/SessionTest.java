@@ -8,7 +8,6 @@ import static org.assertj.core.api.Assertions.*;
 
 public class SessionTest {
 
-
     @Test
     @DisplayName("Игра завершается поражением после превышения количества попыток")
     void gameLosesAfterTooManyMistakes() {
@@ -45,12 +44,9 @@ public class SessionTest {
     void multiCharInputIgnored() {
         Session session = new Session("код", 5);
 
-
         int beforeAttempts = session.getRemainingAttempts();
         String beforeProgress = session.getProgress();
 
-
-        // Проверка, что состояние не изменилось
         assertThat(session.getRemainingAttempts()).isEqualTo(beforeAttempts);
         assertThat(session.getProgress()).isEqualTo(beforeProgress);
     }

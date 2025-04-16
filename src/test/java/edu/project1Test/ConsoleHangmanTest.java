@@ -15,16 +15,16 @@ class ConsoleHangmanTest {
     @Test
     @DisplayName("Пользователь угадывает слово правильно с первой попытки")
     void userWinsGameQuickly() {
-        // given: подставим слово "код" и введем буквы: к, о, д
+        // given:
         String input = String.join(System.lineSeparator(), "к", "о", "д") + System.lineSeparator();
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         Session session = new Session("код", 6);
         ConsoleHangman game = new ConsoleHangman(session, scanner);
 
-        // when: запускаем игру
+        // when:
         game.startGame();
 
-        // then: проверяем, что слово угадано и попытки не кончились
+        // then:
         assertThat(session.isWordGuessed()).isTrue();
         assertThat(session.getRemainingAttempts()).isGreaterThan(0);
     }
