@@ -1,11 +1,13 @@
 package edu.hw3.task6;
 
+import java.util.Objects;
+
 public class Stock {
     String name;
     int price;
 
     public Stock(String name, int price) {
-        this.name = name;
+        this.name = Objects.requireNonNull(name, "Stock name cannot be null");
         this.price = price;
     }
 
@@ -20,7 +22,7 @@ public class Stock {
     @Override
     public String toString() {
         return "Stock{"
-            + "name='" + name + '\''
+            + "name='" + (name != null ? name : "null") + '\''
             + ", price=" + price
             + '}';
     }
@@ -34,11 +36,11 @@ public class Stock {
             return false;
         }
         Stock stock = (Stock) obj;
-        return price == stock.price && name.equals(stock.name);
+        return price == stock.price && Objects.equals(name, stock.name);
     }
 
     @Override
     public int hashCode() {
-        return 31 * name.hashCode() + price;
+        return 31 * Objects.hashCode(name) + price;
     }
 }

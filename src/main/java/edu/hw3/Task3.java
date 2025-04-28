@@ -1,8 +1,8 @@
 package edu.hw3;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Task3 {
     private Task3() {
@@ -19,18 +19,11 @@ public class Task3 {
     }
 
     public static <T> String formatFreqDict(LinkedHashMap<T, Integer> map) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("{");
-
-        for (HashMap.Entry<T, Integer> entry : map.entrySet()) {
-            String key = (entry.getKey() == null) ? "null" : entry.getKey().toString();
-            sb.append(key).append(": ").append(entry.getValue()).append(", ");
-        }
-        if (sb.length() > 1) {
-            sb.setLength(sb.length() - 2);
-        }
-        sb.append("}");
-
-        return sb.toString();
+        return map.entrySet().stream()
+            .map(entry -> {
+                String key = (entry.getKey() == null) ? "null" : entry.getKey().toString();
+                return key + ": " + entry.getValue();
+            })
+            .collect(Collectors.joining(", ", "{", "}"));
     }
 }

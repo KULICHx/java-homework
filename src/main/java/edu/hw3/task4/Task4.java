@@ -6,6 +6,8 @@ import java.util.TreeMap;
 
 public class Task4 {
     private static final Map<Integer, String> ROMAN_MAP = createRomanMap();
+    private static final String ERROR_MSG_TEMPLATE =
+        "Number %d is out of range (%d..%d)";
 
     private static Map<Integer, String> createRomanMap() {
         Map<Integer, String> map = new TreeMap<>(Collections.reverseOrder());
@@ -19,8 +21,11 @@ public class Task4 {
     public static String convertToRoman(int number) {
         if (number < RomanNumerals.MIN_VALUE || number > RomanNumerals.MAX_VALUE) {
             throw new IllegalArgumentException(
-                String.format("Number must be between %d and %d",
-                    RomanNumerals.MIN_VALUE, RomanNumerals.MAX_VALUE)
+                ERROR_MSG_TEMPLATE.formatted(
+                    number,
+                    RomanNumerals.MIN_VALUE,
+                    RomanNumerals.MAX_VALUE
+                )
             );
         }
 
