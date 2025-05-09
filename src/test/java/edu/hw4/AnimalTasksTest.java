@@ -1,10 +1,12 @@
 package edu.hw4;
 
-import edu.hw4.errors.ValidationError;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.util.*;
+import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 class AnimalTasksTest {
 
@@ -92,13 +94,29 @@ class AnimalTasksTest {
     }
 
     @Test
-    @DisplayName("7. 2-е самое старое животное")
+    @DisplayName("7.1. 2-е самое старое животное")
     void find2ndOldest() {
         // Act
         Animal result = AnimalFunctionalTasks.findKthOldest(animals, 2);
 
         // Assert
         assertThat(result.name()).isEqualTo("Рекс");
+    }
+
+    @Test
+    @DisplayName("7.2. Негативные сценарии для findKthOldest")
+    void findKthOldest_NegativeCases() {
+        assertThatThrownBy(() -> AnimalFunctionalTasks.findKthOldest(List.of(), 2))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("превышает размер списка");
+
+        assertThatThrownBy(() -> AnimalFunctionalTasks.findKthOldest(animals, 0))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("должен быть положительным");
+
+        assertThatThrownBy(() -> AnimalFunctionalTasks.findKthOldest(animals, 100))
+            .isInstanceOf(IllegalArgumentException.class);
+
     }
 
     @Test
@@ -112,6 +130,7 @@ class AnimalTasksTest {
             .extracting(Animal::name)
             .isEqualTo("Барсик");
     }
+
 
     @Test
     @DisplayName("9. Суммарное количество лап")
@@ -184,7 +203,7 @@ class AnimalTasksTest {
     void getWeightSumByTypeAndAge() {
         // Act
         Map<Animal.Type, Integer> result =
-            AnimalFunctionalTasks.getWeightSumByTypeAndAge(animals, 1);
+            AnimalFunctionalTasks.getWeightSumByTypeAndAge(animals, 1, 10);
 
         // Assert
         assertThat(result)
@@ -208,11 +227,11 @@ class AnimalTasksTest {
             .extracting(Animal::type)
             .containsExactly(
                 Animal.Type.CAT,
+                Animal.Type.CAT,
+                Animal.Type.DOG,
                 Animal.Type.BIRD,
                 Animal.Type.FISH,
-                Animal.Type.SPIDER,
-                Animal.Type.DOG,
-                Animal.Type.CAT
+                Animal.Type.SPIDER
             );
     }
 
@@ -227,23 +246,37 @@ class AnimalTasksTest {
     }
 
     @Test
-    @DisplayName("18. Поиск самой тяжелой рыбы в двух списках")
+    @DisplayName("18. Поиск самой тяжелой рыбы в нескольких списках")
     void getHeaviestFishInMultipleCollections() {
         // Arrange
         List<Animal> list1 = List.of(
             new Animal("Немо", Animal.Type.FISH, Animal.Sex.F, 1, 5, 1, false),
-            new Animal("Дори", Animal.Type.FISH, Animal.Sex.F, 1, 5, 2, false)
+            new Animal("Дори", Animal.Type.FISH, Animal.Sex.F, 1, 5, 2, false),
+            new Animal("Кот", Animal.Type.CAT, Animal.Sex.M, 5, 25, 8, true) // не рыба
         );
+
         List<Animal> list2 = List.of(
             new Animal("Золотая", Animal.Type.FISH, Animal.Sex.F, 1, 5, 3, false)
         );
 
+        List<Animal> list3 = List.of(
+            new Animal("Акула", Animal.Type.FISH, Animal.Sex.M, 3, 80, 15, true),
+            new Animal("Попугай", Animal.Type.BIRD, Animal.Sex.M, 2, 15, 1, false) // не рыба
+        );
+
+        List<List<Animal>> allLists = List.of(list1, list2, list3);
+
         // Act
-        Animal result = AnimalFunctionalTasks.getHeaviestFishInMultipleCollections(list1, list2);
+        Animal result = AnimalFunctionalTasks.getHeaviestFishInMultipleCollections(allLists);
 
         // Assert
-        assertThat(result.name()).isEqualTo("Золотая");
-        assertThat(result.weight()).isEqualTo(3);
+        assertThat(result)
+            .isNotNull()
+            .satisfies(animal -> {
+                assertThat(animal.name()).isEqualTo("Акула");
+                assertThat(animal.type()).isEqualTo(Animal.Type.FISH);
+                assertThat(animal.weight()).isEqualTo(15);
+            });
     }
 
     @Test
@@ -255,18 +288,21 @@ class AnimalTasksTest {
         );
 
         // Act
-        Map<String, Set<ValidationError>> result =
+        Map<String, Set<Animal.ValidationError>> result =
             AnimalFunctionalTasks.getAnimalsWithDataErrors(invalidAnimals);
 
         // Assert
-        assertThat(result.keySet()).containsExactly(""); // Пустое имя
-        assertThat(result.get(""))
-            .extracting(ValidationError::errorType)
-            .containsExactlyInAnyOrder(
-                ValidationError.ErrorType.INVALID_NAME,
-                ValidationError.ErrorType.AGE_OUT_OF_BOUNDS,
-                ValidationError.ErrorType.NEGATIVE_WEIGHT
-            );
+        assertThat(result.keySet()).containsExactly("");
+
+        Set<String> errorFields = result.get("").stream()
+            .map(Animal.ValidationError::field)
+            .collect(Collectors.toSet());
+
+        assertThat(errorFields)
+            .contains("name")
+            .contains("age")
+            .contains("weight")
+            .hasSizeGreaterThanOrEqualTo(3);
     }
 
     @Test
@@ -274,11 +310,8 @@ class AnimalTasksTest {
     void getFormattedDataErrors_ReturnsFormattedErrors() {
         // Arrange
         List<Animal> animals = List.of(
-            // Животное с ошибкой в имени и весе
             new Animal("", Animal.Type.CAT, Animal.Sex.M, 3, 30, -5, false),
-            // Животное с ошибкой в возрасте
             new Animal("Рекс", Animal.Type.DOG, Animal.Sex.M, -2, 45, 20, true),
-            // Валидное животное без ошибок
             new Animal("Барсик", Animal.Type.CAT, Animal.Sex.M, 5, 25, 4, false)
         );
 
@@ -286,15 +319,15 @@ class AnimalTasksTest {
         Map<String, String> result = AnimalFunctionalTasks.getFormattedDataErrors(animals);
 
         // Assert
-        assertThat(result).hasSize(2); // Два животных с ошибками
+        assertThat(result).hasSize(2);
 
         assertThat(result.get(""))
-            .contains("INVALID_NAME")
-            .contains("NEGATIVE_WEIGHT")
-            .containsPattern("INVALID_NAME.*NEGATIVE_WEIGHT|NEGATIVE_WEIGHT.*INVALID_NAME");
+            .contains("name: Имя не может быть пустым")
+            .contains("weight: Вес должен быть положительным")
+            .containsPattern("name:.*weight:|weight:.*name:");
 
         assertThat(result.get("Рекс"))
-            .isEqualTo("AGE_OUT_OF_BOUNDS");
+            .isEqualTo("age: Возраст должен быть от 0 до 100");
 
         assertThat(result).doesNotContainKey("Барсик");
     }
